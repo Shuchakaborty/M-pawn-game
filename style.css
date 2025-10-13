@@ -1,0 +1,139 @@
+
+:root {
+  --board-size: 400px;
+  --point-size: 48px;
+}
+
+* { box-sizing: border-box; }
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /*background: linear-gradient(135deg, #f9fafb, #e5e7eb);*/
+  background:linear-gradient(to right,#eb25cae8,#2563eb);
+  color:white;
+}
+
+h1.game-title {
+  margin: 8px 0 0;
+  font-size: 28px;
+  color:white;
+  font-weight: bold;
+}
+p.creator {
+  margin: 0 0 16px;
+  font-size: 14px;
+  color:white;
+  font-size:medium;
+}
+
+.topbar {
+  width: var(--board-size);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 14px;
+  color:white;
+}
+
+#status { 
+  font-weight: 600; 
+  font-size: 16px;
+}
+#message { 
+  margin-left: auto; 
+  color:white; 
+  font-weight: 600; 
+}
+
+.mode-select {
+  font-size: 14px;
+  display: flex;
+  gap: 8px;
+  color:white;
+}
+
+.board {
+  position: relative;
+  width: var(--board-size);
+  height: var(--board-size);
+  background:#f5deb3;
+  /* border: 3px solid red; */
+  border:3px solid #8b4513;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.4);
+  overflow: visible;
+}
+
+.board-lines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* points (pawn positions) */
+
+.point {
+  position: absolute;
+  width: var(--point-size);
+  height: var(--point-size);
+  margin-left: calc(var(--point-size) / -2);
+  margin-top: calc(var(--point-size) / -2);
+  border-radius: 50%;
+  border: 3px solid #16a34a;
+  background: white;
+  cursor: pointer;
+  transition: transform .15s, box-shadow .15s, border-color .15s;
+}
+
+/* pawn colors */
+
+.point.red {
+  background:deeppink;
+  border-color: #991b1b;
+  box-shadow: 0 4px 10px rgba(239,68,68,0.4);
+}
+.point.green {
+  background:chartreuse;
+  border-color: #065f46;
+  box-shadow: 0 4px 10px rgba(16,185,129,0.4);
+}
+
+/* when selected */
+
+.point.selected {
+  transform: scale(1.15);
+  box-shadow: 0 6px 16px rgba(59,130,246,0.5);
+  border-color: #2563eb;
+}
+
+/* hover hint */
+
+.point:hover { 
+  transform: translateY(-4px) scale(1.05); 
+}
+
+/* buttons */
+
+button {
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s, transform 0.15s;
+}
+button:hover {
+  background: #f3f4f6;
+  transform: scale(1.05);
+}
+button:active {
+  transform: scale(0.95);
+}
+

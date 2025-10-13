@@ -1,0 +1,55 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>M-Pawn Game</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1 class="game-title">M-Pawn Game</h1>
+  <p class="creator">Created by Anubhab</p>
+
+  <!-- Top control bar -->
+  <div class="topbar">
+    <div id="status">Turn: <span id="turnText">?</span></div>
+
+    <!-- Mode selector -->
+    <div class="mode-select">
+      <label><input type="radio" name="mode" value="2p" checked> Two Player</label>
+      <label><input type="radio" name="mode" value="1p"> Single Player (vs Computer)</label>
+    </div>
+
+    <!-- Buttons -->
+    <button id="tossBtn">Toss</button>
+    <button id="resetBtn">Reset</button>
+
+    <!-- Message area -->
+    <div id="message" aria-live="polite"></div>
+  </div>
+
+  <!-- Game Board -->
+  <div class="board" id="board" aria-label="M Pawn board">
+    <!-- SVG lines for the M shape -->
+    <svg class="board-lines" viewBox="0 0 400 400" preserveAspectRatio="none">
+      <line x1="50" y1="50" x2="50" y2="350" stroke="#333" stroke-width="2"/>
+      <line x1="350" y1="50" x2="350" y2="350" stroke="#333" stroke-width="2"/>
+      <line x1="50" y1="350" x2="350" y2="350" stroke="#333" stroke-width="2"/>
+      <line x1="50" y1="50" x2="200" y2="200" stroke="#333" stroke-width="2"/>
+      <line x1="350" y1="50" x2="200" y2="200" stroke="#333" stroke-width="2"/>
+      <line x1="50" y1="350" x2="200" y2="200" stroke="#333" stroke-width="2"/>
+      <line x1="350" y1="350" x2="200" y2="200" stroke="#333" stroke-width="2"/>
+    </svg>
+
+    <!-- Board Points -->
+    <div class="point" id="tl" data-id="tl" style="left:50px;top:50px;" title="Top Left"></div>
+    <div class="point" id="tr" data-id="tr" style="left:350px;top:50px;" title="Top Right"></div>
+    <div class="point" id="bl" data-id="bl" style="left:50px;top:350px;" title="Bottom Left"></div>
+    <div class="point" id="br" data-id="br" style="left:350px;top:350px;" title="Bottom Right"></div>
+    <div class="point" id="center" data-id="center" style="left:200px;top:200px;" title="Center"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
