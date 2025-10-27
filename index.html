@@ -2,10 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <!-- ✅ Optimized for mobile and prevents zoom on tap -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>M-Pawn Game</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <!-- 🎬 Welcome Screen -->
@@ -16,51 +15,47 @@
     <button id="startBtn" class="start-btn">Start Game</button>
   </div>
 
-  <!-- 🎮 Game Container -->
-  <div class="game-container">
-    <h1 class="game-title">M-Pawn Game</h1>
-    <p class="creator">Created by Anubhab</p>
+  <!-- Game Interface -->
+  <h1 class="game-title">M-Pawn Game</h1>
+  <p class="creator">Created by Anubhab</p>
 
-    <!-- 🕹️ Top Control Bar -->
-    <div class="topbar">
-      <div id="status">Turn: <span id="turnText">?</span></div>
+  <!-- Top Control Bar -->
+  <div class="topbar">
+    <div id="status">Turn: <span id="turnText">?</span></div>
 
-      <!-- 🎯 Mode Selector -->
-      <div class="mode-select">
-        <label><input type="radio" name="mode" value="2p" checked /> 2P</label>
-        <label><input type="radio" name="mode" value="1p" /> 1P</label>
-      </div>
-
-      <!-- ⚙️ Buttons -->
-      <div class="btn-group">
-        <button id="tossBtn">🎲 Toss</button>
-        <button id="resetBtn">🔄 Reset</button>
-      </div>
+    <!-- Mode selector -->
+    <div class="mode-select">
+      <label><input type="radio" name="mode" value="2p" checked> Two Player</label>
+      <label><input type="radio" name="mode" value="1p"> Single Player (vs Computer)</label>
     </div>
 
-    <!-- 🗨️ Message -->
-    <div id="message" aria-live="polite" class="message-box"></div>
+    <!-- Buttons -->
+    <button id="tossBtn">Toss</button>
+    <button id="resetBtn">Reset</button>
 
-    <!-- ♟️ Game Board -->
-    <div class="board" id="board" aria-label="M Pawn board">
-      <!-- SVG M-shape lines -->
-      <svg class="board-lines" viewBox="0 0 400 400" preserveAspectRatio="none">
-        <line x1="50" y1="50" x2="50" y2="350" stroke="#333" stroke-width="2" />
-        <line x1="350" y1="50" x2="350" y2="350" stroke="#333" stroke-width="2" />
-        <line x1="50" y1="350" x2="350" y2="350" stroke="#333" stroke-width="2" />
-        <line x1="50" y1="50" x2="200" y2="200" stroke="#333" stroke-width="2" />
-        <line x1="350" y1="50" x2="200" y2="200" stroke="#333" stroke-width="2" />
-        <line x1="50" y1="350" x2="200" y2="200" stroke="#333" stroke-width="2" />
-        <line x1="350" y1="350" x2="200" y2="200" stroke="#333" stroke-width="2" />
-      </svg>
+    <!-- Message area -->
+    <div id="message" aria-live="polite"></div>
+  </div>
 
-      <!-- Board Points -->
-      <div class="point" id="tl" data-id="tl" style="left:50px;top:50px;" title="Top Left"></div>
-      <div class="point" id="tr" data-id="tr" style="left:350px;top:50px;" title="Top Right"></div>
-      <div class="point" id="bl" data-id="bl" style="left:50px;top:350px;" title="Bottom Left"></div>
-      <div class="point" id="br" data-id="br" style="left:350px;top:350px;" title="Bottom Right"></div>
-      <div class="point" id="center" data-id="center" style="left:200px;top:200px;" title="Center"></div>
-    </div>
+  <!-- Game Board -->
+  <div class="board" id="board" aria-label="M Pawn board">
+    <!-- SVG lines for the M shape -->
+    <svg class="board-lines" viewBox="0 0 400 400" preserveAspectRatio="none">
+      <line x1="50" y1="50" x2="50" y2="350" stroke="#333" stroke-width="2"/>
+      <line x1="350" y1="50" x2="350" y2="350" stroke="#333" stroke-width="2"/>
+      <line x1="50" y1="350" x2="350" y2="350" stroke="#333" stroke-width="2"/>
+      <line x1="50" y1="50" x2="200" y2="200" stroke="#333" stroke-width="2"/>
+      <line x1="350" y1="50" x2="200" y2="200" stroke="#333" stroke-width="2"/>
+      <line x1="50" y1="350" x2="200" y2="200" stroke="#333" stroke-width="2"/>
+      <line x1="350" y1="350" x2="200" y2="200" stroke="#333" stroke-width="2"/>
+    </svg>
+
+    <!-- Board Points -->
+    <div class="point" id="tl" data-id="tl" style="left:50px;top:50px;" title="Top Left"></div>
+    <div class="point" id="tr" data-id="tr" style="left:350px;top:50px;" title="Top Right"></div>
+    <div class="point" id="bl" data-id="bl" style="left:50px;top:350px;" title="Bottom Left"></div>
+    <div class="point" id="br" data-id="br" style="left:350px;top:350px;" title="Bottom Right"></div>
+    <div class="point" id="center" data-id="center" style="left:200px;top:200px;" title="Center"></div>
   </div>
 
   <script src="script.js"></script>
