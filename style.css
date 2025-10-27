@@ -1,10 +1,11 @@
-
 :root {
   --board-size: 400px;
   --point-size: 48px;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 body {
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
@@ -14,70 +15,65 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(to right,#eb25cae8,#2563eb);
+  background: linear-gradient(to right, #eb25cae8, #2563eb);
   color: white;
+  overflow-x: hidden;
 }
 
-/* ==========================================================
-   🔥 Pawn & Movement Animation Section (NEWLY ADDED)
-   ========================================================== */
-.point {
-  position: absolute;
-  width: var(--point-size);
-  height: var(--point-size);
-  margin-left: calc(var(--point-size) / -2);
-  margin-top: calc(var(--point-size) / -2);
-  border-radius: 50%;
-  border: 3px solid #16a34a;
-  background: white;
-  cursor: pointer;
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease,
-    border-color 0.3s ease,
-    top 0.5s ease-in-out,
-    left 0.5s ease-in-out;   /* ✅ Smooth pawn movement */
+/* =====================
+   📱 Responsive Scaling
+====================== */
+@media (max-width: 600px) {
+  :root {
+    --board-size: 300px;
+    --point-size: 36px;
+  }
+
+  h1.game-title {
+    font-size: 22px;
+  }
+
+  p.creator {
+    font-size: 14px;
+  }
+
+  button {
+    padding: 5px 10px;
+    font-size: 13px;
+  }
+
+  .mode-select {
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .topbar {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  #message {
+    margin-left: 0;
+  }
 }
 
-/* ✨ Pawn movement glow effect */
-.point.moving {
-  animation: pawnBounce 0.6s ease;
-  box-shadow: 0 0 20px rgba(255,255,255,0.8);
-  z-index: 10;
-}
-
-/* 🌀 Bounce effect when moving */
-@keyframes pawnBounce {
-  0%   { transform: scale(1) translateY(0); }
-  30%  { transform: scale(1.15) translateY(-10px); }
-  60%  { transform: scale(0.95) translateY(5px); }
-  100% { transform: scale(1) translateY(0); }
-}
-
-/* ✨ Optional curved motion illusion (subtle tilt) */
-.point.curved {
-  animation: curveMove 0.6s ease-in-out;
-}
-@keyframes curveMove {
-  0%   { transform: translate(0, 0) rotate(0deg); }
-  50%  { transform: translate(5px, -10px) rotate(8deg); }
-  100% { transform: translate(0, 0) rotate(0deg); }
-}
-
-/* ========================================================== */
-
+/* Titles */
 h1.game-title {
   margin: 8px 0 0;
   font-size: 28px;
   color: white;
   font-weight: bold;
 }
+
 p.creator {
   margin: 0 0 16px;
   font-size: medium;
   color: white;
 }
 
+/* Topbar */
 .topbar {
   width: var(--board-size);
   display: flex;
@@ -88,16 +84,19 @@ p.creator {
   color: white;
 }
 
-#status { 
-  font-weight: 600; 
+#status {
+  font-weight: 600;
   font-size: 16px;
 }
-#message { 
-  margin-left: auto; 
-  color: white; 
-  font-weight: 600; 
+
+#message {
+  margin-left: auto;
+  color: white;
+  font-weight: 600;
+  text-align: center;
 }
 
+/* Mode Selection */
 .mode-select {
   font-size: 14px;
   display: flex;
@@ -105,6 +104,7 @@ p.creator {
   color: white;
 }
 
+/* Board */
 .board {
   position: relative;
   width: var(--board-size);
@@ -114,6 +114,7 @@ p.creator {
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(0,0,0,0.4);
   overflow: visible;
+  touch-action: manipulation;
 }
 
 .board-lines {
@@ -122,7 +123,21 @@ p.creator {
   pointer-events: none;
 }
 
-/* pawn colors */
+/* Pawn Points */
+.point {
+  position: absolute;
+  width: var(--point-size);
+  height: var(--point-size);
+  margin-left: calc(var(--point-size) / -2);
+  margin-top: calc(var(--point-size) / -2);
+  border-radius: 50%;
+  border: 3px solid #16a34a;
+  background: white;
+  cursor: pointer;
+  transition: transform .2s, box-shadow .2s, border-color .2s;
+}
+
+/* Pawn Colors */
 .point.red {
   background: deeppink;
   border-color: #991b1b;
@@ -134,19 +149,19 @@ p.creator {
   box-shadow: 0 4px 10px rgba(16,185,129,0.4);
 }
 
-/* when selected */
+/* Selected Pawn */
 .point.selected {
   transform: scale(1.15);
   box-shadow: 0 6px 16px rgba(59,130,246,0.5);
   border-color: #2563eb;
 }
 
-/* hover hint */
-.point:hover { 
-  transform: translateY(-4px) scale(1.05); 
+/* Hover hint */
+.point:hover {
+  transform: translateY(-4px) scale(1.05);
 }
 
-/* buttons */
+/* Buttons */
 button {
   padding: 6px 14px;
   border-radius: 6px;
@@ -164,7 +179,7 @@ button:active {
   transform: scale(0.95);
 }
 
-/* 🎬 Welcome Screen Styles */
+/* 🎬 Welcome Screen */
 .welcome-screen {
   position: fixed;
   inset: 0;
@@ -177,6 +192,7 @@ button:active {
   text-align: center;
   z-index: 999;
   transition: opacity 0.8s ease, visibility 0.8s ease;
+  padding: 20px;
 }
 
 .welcome-title {
@@ -231,3 +247,4 @@ button:active {
   opacity: 0;
   visibility: hidden;
 }
+
