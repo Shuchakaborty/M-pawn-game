@@ -5,6 +5,7 @@
 }
 
 * { box-sizing: border-box; }
+
 body {
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   margin: 0;
@@ -13,22 +14,68 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /*background: linear-gradient(135deg, #f9fafb, #e5e7eb);*/
-  background:linear-gradient(to right,#eb25cae8,#2563eb);
-  color:white;
+  background: linear-gradient(to right,#eb25cae8,#2563eb);
+  color: white;
 }
+
+/* ==========================================================
+   🔥 Pawn & Movement Animation Section (NEWLY ADDED)
+   ========================================================== */
+.point {
+  position: absolute;
+  width: var(--point-size);
+  height: var(--point-size);
+  margin-left: calc(var(--point-size) / -2);
+  margin-top: calc(var(--point-size) / -2);
+  border-radius: 50%;
+  border: 3px solid #16a34a;
+  background: white;
+  cursor: pointer;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease,
+    top 0.5s ease-in-out,
+    left 0.5s ease-in-out;   /* ✅ Smooth pawn movement */
+}
+
+/* ✨ Pawn movement glow effect */
+.point.moving {
+  animation: pawnBounce 0.6s ease;
+  box-shadow: 0 0 20px rgba(255,255,255,0.8);
+  z-index: 10;
+}
+
+/* 🌀 Bounce effect when moving */
+@keyframes pawnBounce {
+  0%   { transform: scale(1) translateY(0); }
+  30%  { transform: scale(1.15) translateY(-10px); }
+  60%  { transform: scale(0.95) translateY(5px); }
+  100% { transform: scale(1) translateY(0); }
+}
+
+/* ✨ Optional curved motion illusion (subtle tilt) */
+.point.curved {
+  animation: curveMove 0.6s ease-in-out;
+}
+@keyframes curveMove {
+  0%   { transform: translate(0, 0) rotate(0deg); }
+  50%  { transform: translate(5px, -10px) rotate(8deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+/* ========================================================== */
 
 h1.game-title {
   margin: 8px 0 0;
   font-size: 28px;
-  color:white;
+  color: white;
   font-weight: bold;
 }
 p.creator {
   margin: 0 0 16px;
-  font-size: 14px;
-  color:white;
-  font-size:medium;
+  font-size: medium;
+  color: white;
 }
 
 .topbar {
@@ -38,7 +85,7 @@ p.creator {
   gap: 12px;
   align-items: center;
   margin-bottom: 14px;
-  color:white;
+  color: white;
 }
 
 #status { 
@@ -47,7 +94,7 @@ p.creator {
 }
 #message { 
   margin-left: auto; 
-  color:white; 
+  color: white; 
   font-weight: 600; 
 }
 
@@ -55,16 +102,15 @@ p.creator {
   font-size: 14px;
   display: flex;
   gap: 8px;
-  color:white;
+  color: white;
 }
 
 .board {
   position: relative;
   width: var(--board-size);
   height: var(--board-size);
-  background:#f5deb3;
-  /* border: 3px solid red; */
-  border:3px solid #8b4513;
+  background: #f5deb3;
+  border: 3px solid #8b4513;
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(0,0,0,0.4);
   overflow: visible;
@@ -76,36 +122,19 @@ p.creator {
   pointer-events: none;
 }
 
-/* points (pawn positions) */
-
-.point {
-  position: absolute;
-  width: var(--point-size);
-  height: var(--point-size);
-  margin-left: calc(var(--point-size) / -2);
-  margin-top: calc(var(--point-size) / -2);
-  border-radius: 50%;
-  border: 3px solid #16a34a;
-  background: white;
-  cursor: pointer;
-  transition: transform .15s, box-shadow .15s, border-color .15s;
-}
-
 /* pawn colors */
-
 .point.red {
-  background:deeppink;
+  background: deeppink;
   border-color: #991b1b;
   box-shadow: 0 4px 10px rgba(239,68,68,0.4);
 }
 .point.green {
-  background:chartreuse;
+  background: chartreuse;
   border-color: #065f46;
   box-shadow: 0 4px 10px rgba(16,185,129,0.4);
 }
 
 /* when selected */
-
 .point.selected {
   transform: scale(1.15);
   box-shadow: 0 6px 16px rgba(59,130,246,0.5);
@@ -113,13 +142,11 @@ p.creator {
 }
 
 /* hover hint */
-
 .point:hover { 
   transform: translateY(-4px) scale(1.05); 
 }
 
 /* buttons */
-
 button {
   padding: 6px 14px;
   border-radius: 6px;
@@ -137,3 +164,70 @@ button:active {
   transform: scale(0.95);
 }
 
+/* 🎬 Welcome Screen Styles */
+.welcome-screen {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(to right, #eb25cae8, #2563eb);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  z-index: 999;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+.welcome-title {
+  font-size: 40px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.welcome-sub {
+  font-size: 18px;
+  opacity: 0.9;
+  margin-bottom: 30px;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid white;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.start-btn {
+  padding: 10px 24px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  background: white;
+  color: #2563eb;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.start-btn:hover {
+  background: #f3f4f6;
+  transform: scale(1.05);
+}
+
+.start-btn:active {
+  transform: scale(0.95);
+}
+
+/* Hide animation */
+.welcome-screen.hidden {
+  opacity: 0;
+  visibility: hidden;
+}

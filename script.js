@@ -1,5 +1,17 @@
 /*easy-level:*/
 document.addEventListener('DOMContentLoaded', () => {
+  // 🎬 Welcome Screen
+  const welcomeScreen = document.getElementById('welcomeScreen');
+  const startBtn = document.getElementById('startBtn');
+
+  startBtn.addEventListener('click', () => {
+    welcomeScreen.classList.add('hidden');
+    setTimeout(() => {
+      welcomeScreen.style.display = "none";
+    }, 800);
+  });
+
+  // 🧩 Game Logic
   const positions = {
     tl: ["center", "bl"],
     tr: ["center", "br"],
@@ -12,14 +24,13 @@ document.addEventListener('DOMContentLoaded', () => {
   let turn = null;
   let selected = null;
   let gameOver = false;
-  let mode = "2p"; // "1p" for single vs AI, "2p" for two players
+  let mode = "2p";
 
   const turnText = document.getElementById('turnText');
   const message = document.getElementById('message');
   const resetBtn = document.getElementById('resetBtn');
   const tossBtn = document.getElementById('tossBtn');
 
-  // --- Initialize Board ---
   function initBoard() {
     boardState = { tl: null, tr: null, bl: null, br: null, center: null };
     boardState.tl = "red";
@@ -33,11 +44,9 @@ document.addEventListener('DOMContentLoaded', () => {
     gameOver = false;
     message.textContent = "Click Toss to decide who starts!";
     turnText.textContent = "?";
-    resetBtn.style.display = "inline-block";
     render();
   }
 
-  // --- Render Board ---
   function render() {
     Object.keys(boardState).forEach(id => {
       const el = document.getElementById(id);
@@ -48,12 +57,10 @@ document.addEventListener('DOMContentLoaded', () => {
     turnText.textContent = turn ? turn.charAt(0).toUpperCase() + turn.slice(1) : "?";
   }
 
-  // --- Show Message ---
   function showMessage(txt) {
     message.textContent = txt;
   }
 
-  // --- Toss Logic ---
   function toss() {
     if (turn) {
       showMessage("Toss already done!");
@@ -68,14 +75,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // --- Player Move Logic ---
   function onPointClick(id) {
     if (gameOver || !turn) return;
-    if (mode === "1p" && turn === "green") return; // AI's turn
+    if (mode === "1p" && turn === "green") return;
 
     const occupant = boardState[id];
 
-    // selecting pawn
     if (!selected) {
       if (occupant === turn) {
         selected = id;
@@ -84,20 +89,17 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // deselect pawn
     if (selected === id) {
       selected = null;
       render();
       return;
     }
 
-    // valid move
     if (!boardState[id] && positions[selected].includes(id)) {
       boardState[id] = turn;
       boardState[selected] = null;
       selected = null;
-
-      render(); // ✅ show move immediately
+      render();
 
       if (checkWin()) return;
 
@@ -108,7 +110,6 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(aiMove, 800);
       }
     } else {
-      // invalid move
       if (occupant === turn) {
         selected = id;
         render();
@@ -119,7 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // --- Helpers ---
   function playerPositions(color) {
     return Object.entries(boardState)
       .filter(([k, v]) => v === color)
@@ -134,7 +134,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return false;
   }
 
-  // --- Win Check ---
   function checkWin() {
     for (const player of ["red", "green"]) {
       const opponent = (player === "red") ? "green" : "red";
@@ -145,11 +144,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (oppBothVertical && playerAtCenter) {
         if (boardState.tl === opponent && boardState.bl === opponent && otherPawn === "br") {
-          setTimeout(() => declareWinner(player), 300); // ✅ delay for visibility
+          setTimeout(() => declareWinner(player), 300);
           return true;
         }
         if (boardState.tr === opponent && boardState.br === opponent && otherPawn === "bl") {
-          setTimeout(() => declareWinner(player), 300); // ✅ delay for visibility
+          setTimeout(() => declareWinner(player), 300);
           return true;
         }
       }
@@ -157,19 +156,16 @@ document.addEventListener('DOMContentLoaded', () => {
     return false;
   }
 
-  // --- Declare Winner ---
   function declareWinner(player) {
     showMessage(`${player} wins! 🎉`);
     gameOver = true;
     turnText.textContent = "-";
   }
 
-  // --- Simple AI ---
   function aiMove() {
     if (gameOver) return;
     const aiColor = "green";
     const pawns = playerPositions(aiColor);
-
     let moves = [];
     pawns.forEach(pawn => {
       positions[pawn].forEach(dest => {
@@ -183,8 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const move = moves[Math.floor(Math.random() * moves.length)];
     boardState[move.to] = aiColor;
     boardState[move.from] = null;
-
-    render(); // ✅ show move immediately
+    render();
 
     if (checkWin()) return;
 
@@ -192,14 +187,13 @@ document.addEventListener('DOMContentLoaded', () => {
     render();
   }
 
-  // --- Event Listeners ---
   document.querySelectorAll('.point').forEach(p => {
     p.addEventListener('click', () => onPointClick(p.dataset.id));
   });
+
   resetBtn.addEventListener('click', initBoard);
   tossBtn.addEventListener('click', toss);
 
-  // Mode radio buttons
   document.querySelectorAll('input[name="mode"]').forEach(radio => {
     radio.addEventListener('change', e => {
       mode = e.target.value;
@@ -210,7 +204,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   initBoard();
 });
-
 
 
 
