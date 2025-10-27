@@ -1,7 +1,3 @@
-/* ================================
-   🧩 M-PAWN GAME (TOUGH LEVEL + MOBILE OPTIMIZED)
-================================== */
-
 document.addEventListener('DOMContentLoaded', () => {
   // 🎬 Welcome Screen
   const welcomeScreen = document.getElementById('welcomeScreen');
@@ -11,10 +7,10 @@ document.addEventListener('DOMContentLoaded', () => {
     welcomeScreen.classList.add('hidden');
     setTimeout(() => {
       welcomeScreen.style.display = "none";
-    }, 600);
+    }, 800);
   });
 
-  // 🧩 Game Setup
+  // 🧩 Game Logic
   const positions = {
     tl: ["center", "bl"],
     tr: ["center", "br"],
@@ -34,9 +30,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const resetBtn = document.getElementById('resetBtn');
   const tossBtn = document.getElementById('tossBtn');
 
-  /* 🧭 INIT BOARD */
   function initBoard() {
-    boardState = { tl: "red", tr: "red", bl: "green", br: "green", center: null };
+    boardState = { tl: null, tr: null, bl: null, br: null, center: null };
+    boardState.tl = "red";
+    boardState.tr = "red";
+    boardState.bl = "green";
+    boardState.br = "green";
+    boardState.center = null;
+
     turn = null;
     selected = null;
     gameOver = false;
@@ -45,7 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
     render();
   }
 
-  /* 🎨 RENDER BOARD */
   function render() {
     Object.keys(boardState).forEach(id => {
       const el = document.getElementById(id);
@@ -56,27 +56,30 @@ document.addEventListener('DOMContentLoaded', () => {
     turnText.textContent = turn ? turn.charAt(0).toUpperCase() + turn.slice(1) : "?";
   }
 
-  /* 💬 Message Helper */
   function showMessage(txt) {
     message.textContent = txt;
   }
 
-  /* 🪙 TOSS FUNCTION */
   function toss() {
-    if (turn) return showMessage("Toss already done!");
+    if (turn) {
+      showMessage("Toss already done!");
+      return;
+    }
     turn = Math.random() < 0.5 ? "red" : "green";
     showMessage(`Toss won by ${turn}. ${turn} starts!`);
     render();
 
-    if (mode === "1p" && turn === "green") setTimeout(aiMove, 800);
+    if (mode === "1p" && turn === "green") {
+      setTimeout(aiMove, 800);
+    }
   }
 
-  /* 🎯 HANDLE PLAYER CLICK (Touch Optimized) */
   function onPointClick(id) {
     if (gameOver || !turn) return;
     if (mode === "1p" && turn === "green") return;
 
     const occupant = boardState[id];
+
     if (!selected) {
       if (occupant === turn) {
         selected = id;
@@ -92,7 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (!boardState[id] && positions[selected].includes(id)) {
-      animatePawnMove(selected, id, turn); // 👈 Animated movement
       boardState[id] = turn;
       boardState[selected] = null;
       selected = null;
@@ -103,60 +105,34 @@ document.addEventListener('DOMContentLoaded', () => {
       turn = (turn === 'red') ? 'green' : 'red';
       render();
 
-      if (mode === "1p" && turn === "green") setTimeout(aiMove, 600);
+      if (mode === "1p" && turn === "green") {
+        setTimeout(aiMove, 800);
+      }
     } else {
       if (occupant === turn) {
         selected = id;
         render();
       } else {
-        showMessage("Invalid move!");
-        setTimeout(() => { if (!gameOver) showMessage(""); }, 600);
+        showMessage("Invalid move.");
+        setTimeout(() => { if (!gameOver) showMessage(""); }, 700);
       }
     }
   }
 
-  /* 🕹️ Pawn Movement Animation (Smooth on Mobile) */
-  function animatePawnMove(fromId, toId, color) {
-    const fromEl = document.getElementById(fromId);
-    const toEl = document.getElementById(toId);
-    const movingPawn = document.createElement('div');
-    movingPawn.className = `pawn ${color} animate`;
-    document.body.appendChild(movingPawn);
-
-    const start = fromEl.getBoundingClientRect();
-    const end = toEl.getBoundingClientRect();
-    const dx = end.left - start.left;
-    const dy = end.top - start.top;
-
-    movingPawn.style.left = start.left + "px";
-    movingPawn.style.top = start.top + "px";
-    movingPawn.style.width = start.width + "px";
-    movingPawn.style.height = start.height + "px";
-
-    requestAnimationFrame(() => {
-      movingPawn.style.transform = `translate(${dx}px, ${dy}px)`;
-    });
-
-    setTimeout(() => {
-      movingPawn.remove();
-    }, 400);
-  }
-
-  /* 🧮 Helpers */
   function playerPositions(color) {
     return Object.entries(boardState)
-      .filter(([_, v]) => v === color)
+      .filter(([k, v]) => v === color)
       .map(([k]) => k);
   }
 
   function bothOnSameVerticalSide(color) {
     const pos = playerPositions(color);
+    if (pos.length !== 2) return false;
     if (pos.includes('tl') && pos.includes('bl')) return true;
     if (pos.includes('tr') && pos.includes('br')) return true;
     return false;
   }
 
-  /* 🏆 WIN CHECK */
   function checkWin() {
     for (const player of ["red", "green"]) {
       const opponent = (player === "red") ? "green" : "red";
@@ -179,29 +155,27 @@ document.addEventListener('DOMContentLoaded', () => {
     return false;
   }
 
-  /* 🏁 Declare Winner */
   function declareWinner(player) {
-    showMessage(`${player.toUpperCase()} wins! 🎉`);
+    showMessage(`${player} wins! 🎉`);
     gameOver = true;
     turnText.textContent = "-";
   }
 
-  /* 🤖 AI Move */
   function aiMove() {
     if (gameOver) return;
     const aiColor = "green";
     const pawns = playerPositions(aiColor);
     let moves = [];
-
     pawns.forEach(pawn => {
       positions[pawn].forEach(dest => {
-        if (!boardState[dest]) moves.push({ from: pawn, to: dest });
+        if (!boardState[dest]) {
+          moves.push({ from: pawn, to: dest });
+        }
       });
     });
 
     if (moves.length === 0) return;
     const move = moves[Math.floor(Math.random() * moves.length)];
-    animatePawnMove(move.from, move.to, aiColor);
     boardState[move.to] = aiColor;
     boardState[move.from] = null;
     render();
@@ -212,11 +186,8 @@ document.addEventListener('DOMContentLoaded', () => {
     render();
   }
 
-  /* 🎮 Event Listeners (Click + Touch Support) */
   document.querySelectorAll('.point').forEach(p => {
-    const id = p.dataset.id;
-    p.addEventListener('click', () => onPointClick(id));
-    p.addEventListener('touchstart', () => onPointClick(id));
+    p.addEventListener('click', () => onPointClick(p.dataset.id));
   });
 
   resetBtn.addEventListener('click', initBoard);
